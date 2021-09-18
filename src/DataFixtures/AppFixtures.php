@@ -54,7 +54,7 @@ class AppFixtures extends Fixture
         // Add Books
         for ($i=0; $i < 20; $i++) {
             $book = new Book();
-            $book->setTitle($faker->title);
+            $book->setTitle($faker->sentence(3));
             $book->setDescription($faker->paragraph(3));
             $book->setCover($faker->imageUrl(300, 600));
             $book->setPrice($faker->randomFloat(2, 300, 5000));
