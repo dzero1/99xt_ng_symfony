@@ -93,7 +93,7 @@ class AppFixtures extends Fixture
                 "code": "FEE300",
                 "discount_type": "AMOUNT",
                 "amount": "300"
-            },
+            }
         ]');
         foreach ($coupons as $couponData) {
             $coupon = new Coupon();
@@ -107,7 +107,9 @@ class AppFixtures extends Fixture
         }
 
         // Add Discount
-        $category = $this->categoryRepository->findOne(['name' => 'Children']);
+        $category = $this->categoryRepository->findOneBy(['name' => 'Children']);
+        $manager->flush();
+
         if ($category){
             $discount = new Discount();
             $discount->setRelateId($category->getId());
