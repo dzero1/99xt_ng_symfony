@@ -3,11 +3,10 @@
 namespace App\DataFixtures;
 
 use App\Entity\Book;
-use App\Entity\BookCategories;
+use App\Entity\BookCategory;
 use App\Entity\Category;
 use App\Entity\Coupon;
 use App\Entity\Discount;
-use App\Entity\User;
 use App\Repository\CategoryRepository;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -27,18 +26,6 @@ class AppFixtures extends Fixture
         // $manager->persist($product);
 
         $faker = Factory::create();
-
-        // Add a user
-        $user = new User();
-        $user->setUsername('user');
-        $user->setPassword(md5('user123'));
-        $user->setFirstName($faker->firstName);
-        $user->setLastName($faker->lastName);
-        $user->setEmail($faker->email);
-        $user->setAvatar($faker->imageUrl(200, 200, 'cats'));
-        $user->setCreated(new DateTimeImmutable());
-        $manager->persist($user);
-        $manager->flush();
 
         // Add Categories
         $categories = ['Children', 'Fiction', 'Comic', 'Art', 'History'];
@@ -65,7 +52,7 @@ class AppFixtures extends Fixture
             $categoryUnitLength = rand(1, count($categories));
             for ($j=0; $j < $categoryUnitLength; $j++) { 
                 $category = $categories[$j];
-                $bookCategory = new BookCategories();
+                $bookCategory = new BookCategory();
                 $bookCategory->setBook($book);
                 $bookCategory->setCategory($category);
                 $manager->persist($bookCategory);

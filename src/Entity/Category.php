@@ -24,9 +24,15 @@ class Category
      */
     private $name;
 
+    /**
+     * @ORM\OneToMany(targetEntity=BookCategory::class, mappedBy="categoryId")
+     */
+    private $categoryBooks;
+
     public function __construct()
     {
         $this->bookCategories = new ArrayCollection();
+        $this->categoryBooks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -42,6 +48,36 @@ class Category
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BookCategory[]
+     */
+    public function getCategoryBooks(): Collection
+    {
+        return $this->categoryBooks;
+    }
+
+    public function addCategoryBook(BookCategory $categoryBook): self
+    {
+        if (!$this->categoryBooks->contains($categoryBook)) {
+            $this->categoryBooks[] = $categoryBook;
+            $categoryBook->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategoryBook(BookCategory $categoryBook): self
+    {
+        if ($this->categoryBooks->removeElement($categoryBook)) {
+            // set the owning side to null (unless already changed)
+            if ($categoryBook->getCategory() === $this) {
+                $categoryBook->setCategory(null);
+            }
+        }
 
         return $this;
     }

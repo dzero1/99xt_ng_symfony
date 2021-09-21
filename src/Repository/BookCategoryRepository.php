@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\BookCategories;
+use App\Entity\BookCategory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method BookCategories|null find($id, $lockMode = null, $lockVersion = null)
- * @method BookCategories|null findOneBy(array $criteria, array $orderBy = null)
- * @method BookCategories[]    findAll()
- * @method BookCategories[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method BookCategory|null find($id, $lockMode = null, $lockVersion = null)
+ * @method BookCategory|null findOneBy(array $criteria, array $orderBy = null)
+ * @method BookCategory[]    findAll()
+ * @method BookCategory[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BookCategoriesRepository extends ServiceEntityRepository
+class BookCategoryRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, BookCategories::class);
+        parent::__construct($registry, BookCategory::class);
     }
 
     // /**
-    //  * @return BookCategories[] Returns an array of BookCategories objects
+    //  * @return BookCategory[] Returns an array of BookCategory objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class BookCategoriesRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?BookCategories
+    public function findOneBySomeField($value): ?BookCategory
     {
         return $this->createQueryBuilder('b')
             ->andWhere('b.exampleField = :val')

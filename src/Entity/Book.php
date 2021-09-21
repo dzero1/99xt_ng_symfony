@@ -44,6 +44,11 @@ class Book
      */
     private $created;
 
+    /**
+     * @ORM\OneToMany(targetEntity=BookCategory::class, mappedBy="bookId")
+     */
+    private $bookCategories;
+
     public function __construct()
     {
         $this->bookCategories = new ArrayCollection();
@@ -114,4 +119,45 @@ class Book
         return $this;
     }
 
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'description' => $this->getDescription(),
+            'cover' => $this->getCover(),
+            'price' => $this->getPrice(),
+            'created' => $this->getCreated()
+        ];
+    }
+
+    /**
+     * @return Collection|BookCategory[]
+     */
+    public function getBookCategories(): Collection
+    {
+        return $this->bookCategories;
+    }
+
+    public function addBookCategory(BookCategory $bookCategory): self
+    {
+        if (!$this->bookCategories->contains($bookCategory)) {
+            $this->bookCategories[] = $bookCategory;
+            $bookCategory->setBook($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookCategory(BookCategory $bookCategory): self
+    {
+        if ($this->bookCategories->removeElement($bookCategory)) {
+            // set the owning side to null (unless already changed)
+            if ($bookCategory->getBook() === $this) {
+                $bookCategory->setBook(null);
+            }
+        }
+
+        return $this;
+    }
 }

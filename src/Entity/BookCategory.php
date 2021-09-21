@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\BookCategoriesRepository;
+use App\Repository\BookCategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=BookCategoriesRepository::class)
+ * @ORM\Entity(repositoryClass=BookCategoryRepository::class)
  */
-class BookCategories
+class BookCategory
 {
     /**
      * @ORM\Id
@@ -18,13 +18,13 @@ class BookCategories
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Book::class)
+     * @ORM\ManyToOne(targetEntity=Book::class, inversedBy="bookCategories")
      * @ORM\JoinColumn(nullable=false)
      */
     private $book;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Category::class)
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="categoryBooks")
      * @ORM\JoinColumn(nullable=false)
      */
     private $category;

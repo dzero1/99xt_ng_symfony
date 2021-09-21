@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Cart;
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,6 +18,19 @@ class CartRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Cart::class);
+    }
+
+    public function addToCart($book)
+    {
+        $cart = new Cart();
+
+        $cart
+            // ->setUser()
+            ->setBook($book)
+            ->setCreated(new DateTimeImmutable());
+
+        $this->manager->persist($cart);
+        $this->manager->flush();
     }
 
     // /**
