@@ -45,7 +45,7 @@ class Book
     private $created;
 
     /**
-     * @ORM\OneToMany(targetEntity=BookCategory::class, mappedBy="bookId")
+     * @ORM\OneToMany(targetEntity=BookCategory::class, mappedBy="book")
      */
     private $bookCategories;
 

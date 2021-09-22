@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Coupon;
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,6 +18,23 @@ class CouponRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Coupon::class);
+    }
+
+    /**
+     * @return Coupon[] Returns an array of Coupon objects
+     */
+    public function getCoupon($code)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.code = :code')
+            ->andWhere('c.active = :active')
+            ->andWhere('c.expire > :date')
+            ->setParameter('code', $code)
+            ->setParameter('active', '1')
+            ->setParameter('date', new DateTimeImmutable())
+            ->orderBy('c.id', 'DESC')
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     // /**

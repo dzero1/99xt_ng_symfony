@@ -112,11 +112,23 @@ class AppFixtures extends Fixture
 
         $discount = new Discount();
         $discount->setRelateType('CATEGORY');
+        $discount->setRelateId(-1);
         $discount->setQty(10);
         $discount->setDiscountType('PERCENTAGE');
         $discount->setAmount(5);
         $discount->setActive(1);
-        $discount->setExpire(new DateTimeImmutable("+1year"));
+        $discount->setExpire(new DateTimeImmutable("+100year"));
+        $discount->setCreated(new DateTimeImmutable());
+        $manager->persist($discount);
+
+        $discount = new Discount();
+        $discount->setRelateType('CATEGORY');
+        // $discount->setRelateId(null);
+        $discount->setQty(20);
+        $discount->setDiscountType('PERCENTAGE');
+        $discount->setAmount(3);
+        $discount->setActive(1);
+        $discount->setExpire(new DateTimeImmutable("+10year"));
         $discount->setCreated(new DateTimeImmutable());
         $manager->persist($discount);
 

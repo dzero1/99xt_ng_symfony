@@ -4,27 +4,23 @@ namespace App\Controller;
 
 use App\Repository\BookCategoryRepository;
 use App\Repository\BookRepository;
-use App\Repository\CartRepository;
 use App\Repository\CategoryRepository;
-use Doctrine\ORM\Query;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-class BookController extends AbstractController
+class BookController extends BaseController
 {
     public function __construct(BookRepository $bookRepository, 
         CategoryRepository $categoryRepository, 
-        BookCategoryRepository $bookCategoryRepository,
-        CartRepository $cartRepository
-    ) {
+        BookCategoryRepository $bookCategoryRepository
+    )
+    {
         $this->bookRepository = $bookRepository;
         $this->categoryRepository = $categoryRepository;
         $this->bookCategoryRepository = $bookCategoryRepository;
-        $this->cartRepository = $cartRepository;
     }
 
     /**
@@ -32,7 +28,7 @@ class BookController extends AbstractController
      */
     public function getAllBooks(): Response
     {
-        $bookResponce = [];
+        $bookResponse = [];
 
         // Get all books
         $books = $this->bookRepository->findAll(); //createQueryBuilder('c')->getQuery()->getResult(Query::HYDRATE_ARRAY);
@@ -60,10 +56,10 @@ class BookController extends AbstractController
             // Set all categories
             $bookRes['categories'] = $categories;
 
-            $bookResponce[] = $bookRes;
+            $bookResponse[] = $bookRes;
         }
 
-        return $this->json($bookResponce);
+        return $this->response($bookResponse);
     }
 
 
@@ -72,7 +68,7 @@ class BookController extends AbstractController
      */
     public function getAllBooksByCategory($id): Response
     {
-        $bookResponce = [];
+        $bookResponse = [];
 
         // Get category
         $category = $this->categoryRepository->findBy(['id' => $id]);
@@ -105,38 +101,14 @@ class BookController extends AbstractController
                 // Set all categories
                 $bookRes['categories'] = $categories;
 
-                $bookResponce[] = $bookRes;
+                $bookResponse[] = $bookRes;
             }
 
-            return $this->json($bookResponce);
+            return $this->response($bookResponse);
         } else {
-            throw new NotFoundHttpException("Category not found.");
+            return $this->response("Category not found.", 'error');
         }
 
     }
 
-    /**
-     * @Route("/api/cart/add", name="add_to_cart", methods={"POST"}, format="json")
-     */
-    public function addToCart(Request $request, $id): Response
-    {
-        // Load data from request 
-        $data = json_decode($request->getContent(), true);
-
-        if ($data['id']){
-            // Get book
-            $book = $this->bookRepository->findOneBy(['id' => $data['id']]);
-            if ($book){
-                $this->cartRepository->addToCart($book);
-                
-                return $this->json([
-                    'status' => 'success'
-                ]);
-            } else {
-                throw new NotFoundHttpException("Book not sent.");
-            }
-        } else {
-            throw new NotFoundHttpException("Book id not sent.");
-        }
-    }
 }

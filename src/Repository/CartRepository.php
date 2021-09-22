@@ -6,6 +6,7 @@ use App\Entity\Cart;
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @method Cart|null find($id, $lockMode = null, $lockVersion = null)
@@ -15,22 +16,50 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CartRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, Security $security)
     {
+        $this->security = $security;
         parent::__construct($registry, Cart::class);
     }
 
+    /**
+    * @return Void
+    */
     public function addToCart($book)
     {
         $cart = new Cart();
-
+        $user = $this->security->getUser();
         $cart
-            // ->setUser()
+            ->setUser($user)
             ->setBook($book)
             ->setCreated(new DateTimeImmutable());
 
-        $this->manager->persist($cart);
-        $this->manager->flush();
+        $this->_em->persist($cart);
+        $this->_em->flush();
+        return $cart;
+    }
+
+
+    /**
+    * @return Void
+    */
+    public function removeFromCart($cartItem)
+    {
+        $this->_em->remove($cartItem);
+        $this->_em->flush();
+    }
+
+    /**
+    * @return Void
+    */
+    public function clearCart()
+    {
+        $user = $this->security->getUser();
+        $cartItems = $this->findBy(['user' => $user]);
+        foreach ($cartItems as $item) {
+            $this->_em->remove($item);
+        }
+        $this->_em->flush();
     }
 
     // /**
